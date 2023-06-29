@@ -1,6 +1,6 @@
 import streamlit as st
 from transformers import AutoModelForSequenceClassification, BertJapaneseTokenizer
-
+import scipy
 
 def predict(text):
     # Load BERT model and tokenizer
@@ -20,10 +20,14 @@ def predict(text):
 
     # Make prediction
     outputs = model(**encoded_input)
+    temp = outputs.logits.tolist()
+    percent = scipy.special.softmax(temp)
+    zero = round(percent[0][0],2)
+    one = round(percent[0][1],2)
     predictions = outputs.logits.argmax(dim=1)
 
     # Return prediction
-    return predictions.item()
+    return predictions.item(),zero,one
 
 
 # Create Streamlit app
@@ -31,12 +35,18 @@ def main():
     st.title("BERT Classification App")
 
     # Get user input
-    user_input = st.text_input("Enter a sentence for classification:")
+    user_input = st.text_area("Enter a sentence for classification:")
 
     # Make prediction when user submits the form
     if st.button("Classify"):
         prediction = predict(user_input)
-        st.write(f"Predicted class: {prediction}")
+        if prediction[0] == 1:
+            kekka = "成功する可能性が高いです。"
+        else:
+            kekka = "再考したほうが良いです。"
+        st.subheader(f"このテキストは、{kekka}")
+        st.write(f"成功投稿である確率: {prediction[2]}")
+        st.write(f"失敗投稿の確率: {prediction[1]}")
 
 
 if __name__ == '__main__':
