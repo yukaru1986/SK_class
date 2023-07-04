@@ -8,7 +8,7 @@ import pandas as pd
 from write_title import write_title
 
 df = pd.read_csv("df/shibuya_df.csv")
-openai.api_key = st.text_input("openAI APIkey", "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")
+openai.api_key = st.text_input("openAI APIkey", "")
 
 def titlegen():
     st.title("Title Generator")
