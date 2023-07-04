@@ -1,12 +1,38 @@
 import streamlit as st
 from transformers import AutoModelForSequenceClassification, BertJapaneseTokenizer
 import scipy
+import openai
+
+import pandas as pd
+
+from write_title import write_title
+
+df = pd.read_csv("df/shibuya_df.csv")
+openai.api_key = st.text_input("openAI APIkey", "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")
+
+def titlegen():
+    st.title("Title Generator")
+    # Create a text input
+    user_inputtext = st.text_input("text", "革製品は使えば使うほど洗練されていく")
+    # Create a button
+    send_button = st.button("Gen")
+    # Handle button click event
+    if send_button:
+        # Perform some action with the user input
+        process_input(user_inputtext)
+
+def process_input(user_inputtext):
+    # Do something with the user input
+    ai_res = write_title(df, keyword=user_inputtext)
+    st.write(ai_res)
+
+titlegen()
 
 def predict(text):
     # Load BERT model and tokenizer
     model_name = 'yukaru1986/SK_class'
     model_token = 'cl-tohoku/bert-base-japanese-whole-word-masking'
-    model = AutoModelForSequenceClassification.from_pretrained(model_name,use_auth_token="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")
+    model = AutoModelForSequenceClassification.from_pretrained(model_name, use_auth_token="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")
     tokenizer = BertJapaneseTokenizer.from_pretrained(model_token)
 
     # Tokenize input text
@@ -30,7 +56,6 @@ def predict(text):
     return predictions.item(),zero,one
 
 
-# Create Streamlit app
 def main():
     st.title("BERT Classification App")
 
