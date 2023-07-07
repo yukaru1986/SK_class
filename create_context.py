@@ -1,5 +1,9 @@
+import numpy as np
 import openai
-from openai.embeddings_utils import distances_from_embeddings
+
+def cosine_similarity(a, b):
+    # openai.embeddings_utils.cosine_similarity()
+    return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
 
 
 def create_context(
@@ -11,9 +15,7 @@ def create_context(
         'data'][0]['embedding']
 
     # Get the distances from the embeddings
-    df['distances'] = distances_from_embeddings(q_embeddings,
-                                                df['embeddings'].values,
-                                                distance_metric='cosine')
+    df['distances'] = df['emb'].apply(lambda x: cosine_similarity(q_embeddings, x))
 
     returns = []
     cur_len = 0

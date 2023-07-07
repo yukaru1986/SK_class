@@ -29,7 +29,7 @@ def write_title(
                        "content": "You are a marketing professional."},
                       {"role": "user", "content": f"You are a marketing professional.\
                       Make 5 title ideas for sns post.\
-                      Keyword is {query}.\
+                      Keyword is {keyword}.\
                       Output in Japanese based on the context below,\
                       The target audience consists of individuals, particularly creators and artists.\
                       Please use a formal writing style.\
