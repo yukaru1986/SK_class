@@ -8,7 +8,6 @@ from write_title import write_title
 from write_text import  write_maintext
 
 df = pd.read_csv("df/ShibuyaKabanAi_referenceText - Output.csv")
-df = df.rename(columns={'シブヤカバンの、メインメッセージは、': 'text'})
 openai.api_key = st.text_input("openAI APIkey", "")
 df['emb'] = df.text.apply(lambda x: openai.Embedding.create(input=x, engine='text-embedding-ada-002')['data'][0]['embedding'])
 tokenizer = tiktoken.get_encoding("cl100k_base")
